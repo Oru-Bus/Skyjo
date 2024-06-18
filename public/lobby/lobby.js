@@ -1,36 +1,40 @@
-const socket = io();
-let nickname = localStorage.getItem('nickname');
+document.addEventListener('DOMContentLoaded', () => {
+    const createRoomBtn = document.getElementById('createRoomBtn');
+    const joinRoomBtn = document.getElementById('joinRoomBtn');
+    const joinRoomModal = document.getElementById('joinRoomModal');
+    const closeModal = document.getElementsByClassName('close')[0];
+    const submitJoinBtn = document.getElementById('submitJoinBtn');
+    const roomCodeInput = document.getElementById('roomCodeInput');
 
-function createRoom() {
-    if (nickname) {
-        socket.emit('createRoom', { nickname });
-    } else {
-        alert('Please enter a nickname first');
-        window.location.href = '/';
+    createRoomBtn.addEventListener('click', () => {
+        const roomCode = generateRoomCode();
+        window.location.href = `../room/room.html?code=${roomCode}`;
+    });
+
+    joinRoomBtn.addEventListener('click', () => {
+        joinRoomModal.style.display = 'block';
+    });
+
+    closeModal.addEventListener('click', () => {
+        joinRoomModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === joinRoomModal) {
+            joinRoomModal.style.display = 'none';
+        }
+    });
+
+    submitJoinBtn.addEventListener('click', () => {
+        const roomCode = roomCodeInput.value;
+        if (roomCode) {
+            window.location.href = `../room/room.html?code=${roomCode}`;
+        } else {
+            alert('Please enter a room code.');
+        }
+    });
+
+    function generateRoomCode() {
+        return Math.random().toString(36).substr(2, 6).toUpperCase();
     }
-}
-
-function joinRoom() {
-    const roomId = document.getElementById('roomId').value;
-    if (nickname && roomId) {
-        socket.emit('joinRoom', { roomId, nickname });
-    } else {
-        alert('Please enter both a nickname and a room code');
-    }
-}
-
-socket.on('roomCreated', ({ roomId, nickname, owner }) => {
-    document.getElementById('lobby').style.display = 'none';
-    document.getElementById('room').style.display = 'block';
-    document.getElementById('room-info').textContent = `Room ID: ${roomId} - You are the owner: ${owner}`;
-});
-
-socket.on('joinedRoom', ({ roomId, nickname, owner }) => {
-    document.getElementById('lobby').style.display = 'none';
-    document.getElementById('room').style.display = 'block';
-    document.getElementById('room-info').textContent = `Room ID: ${roomId} - You are the owner: ${owner}`;
-});
-
-socket.on('error', (message) => {
-    alert(message);
 });

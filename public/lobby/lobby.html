@@ -1,20 +1,27 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Skyjo Online</title>
-    <link rel="stylesheet" type="text/css" href="lobby.css">
-</head>
-<body>
-    <div id="lobby">
-        <button onclick="createRoom()">Create Room</button>
-        <input id="roomId" placeholder="Enter room code" />
-        <button onclick="joinRoom()">Join Room</button>
-    </div>
-    <div id="room" style="display:none;">
-        <h2>Room</h2>
-        <p id="room-info"></p>
-    </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="lobby.js"></script>
-</body>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Multi-Room Site</title>
+        <link rel="stylesheet" href="lobby.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Welcome to the Multi-Room Site</h1>
+            <button id="createRoomBtn">Create a Room</button>
+            <button id="joinRoomBtn">Join a Room</button>
+
+            <div id="joinRoomModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Join a Room</h2>
+                    <input type="text" id="roomCodeInput" placeholder="Enter Room Code">
+                    <button id="submitJoinBtn">Join Room</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="lobby.js"></script>
+    </body>
 </html>
