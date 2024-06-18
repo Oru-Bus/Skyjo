@@ -1,0 +1,10 @@
+/* Styles for home page */
+#initial-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20%;
+}
+#nickname {
+    margin-bottom: 10px;
+}

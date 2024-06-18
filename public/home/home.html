@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Skyjo Online</title>
-    </head>
-    <body>
-        <div id="initial-screen">
-            <input id="nickname" placeholder="Entrez votre pseudo" />
-            <button onclick="setNickname()">Valider</button>
-        </div>
-        <div id="lobby" style="display:none;">
-            <button onclick="createRoom()">Créer un salon</button>
-            <input id="roomId" placeholder="Entrez un code" />
-            <button onclick="joinRoom()">Rejoindre le salon</button>
-        </div>
-        <div id="room" style="display:none;">
-            <h2>Salon</h2>
-            <p id="room-info"></p>
-        </div>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="home.js"></script>
-    </body>
+<head>
+    <title>Skyjo Online</title>
+    <link rel="stylesheet" type="text/css" href="home.css">
+</head>
+<body>
+    <div id="initial-screen">
+        <input id="nickname" placeholder="Enter your nickname" />
+        <button onclick="setNickname()">Enter</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="home.js"></script>
+</body>
 </html>

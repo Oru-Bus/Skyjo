@@ -1,0 +1,13 @@
+/* Styles for lobby page */
+#lobby {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20%;
+}
+#room {
+    display: none;
+}
+#room-info {
+    margin-top: 10px;
+}
