@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+}
+
+#home, #lobby, #game {
+    text-align: center;
+}
+
+#gameBoard {
+    display: none;
+    text-align: center;
+}
+
+#playersHands {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.playerHand {
+    margin: 0 20px;
+}
+
+.card {
+    width: 100px;
+    height: 150px;
+    background-color: white;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+}
