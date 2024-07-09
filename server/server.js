@@ -41,6 +41,18 @@ io.on('connection', (socket) => {
         io.to(gameCode).emit('updateLobby', { gameCode, players: games[gameCode].players });
     });
 
+    socket.on('joinGame', (data) => {
+        const gameCode = data.gameCode;
+        if (games[gameCode]) {
+            games[gameCode].players.push({ id: socket.id, name: data.playerName, cards: generateInitialCards() });
+            socket.join(gameCode);
+            socket.emit('gameJoined', { gameCode, players: games[gameCode].players });
+            io.to(gameCode).emit('updateLobby', { gameCode, players: games[gameCode].players });
+        } else {
+            socket.emit('error', { message: 'Game not found' });
+        }
+    });
+
     socket.on('startGame', (data) => {
         const gameCode = data.gameCode;
         io.to(gameCode).emit('startGame', { players: games[gameCode].players });

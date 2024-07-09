@@ -9,20 +9,19 @@ window.onload = function() {
     const params = new URLSearchParams(window.location.search);
     if (params.has('pseudo')) {
         playerName = params.get('pseudo');
-        socket.emit('createOrJoinGame', { playerName });
-    }
-
-    if (params.has('gameCode')) {
-        gameCode = params.get('gameCode');
-        playerName = params.get('pseudo');
-        socket.emit('joinGame', { gameCode, playerName });
+        if (params.has('gameCode')) {
+            gameCode = params.get('gameCode');
+            socket.emit('joinGame', { gameCode, playerName });
+        } else {
+            socket.emit('createOrJoinGame', { playerName });
+        }
     }
 }
 
 socket.on('gameCreated', (data) => {
     gameCode = data.gameCode;
     isGameCreator = true;
-    document.getElementById('gameLink').innerText = `Share this link to invite others: ${window.location.origin}/lobby.html?gameCode=${gameCode}&pseudo=${playerName}`;
+    document.getElementById('gameLink').innerText = `Share this link to invite others: ${window.location.origin}/lobby.html?gameCode=${gameCode}`;
     updateLobby(data);
 });
 

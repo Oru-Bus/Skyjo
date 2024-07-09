@@ -16,6 +16,19 @@
         </div>
 
         <script src="/socket.io/socket.io.js"></script>
-        <script src="script.js"></script>
+        <script>
+            const params = new URLSearchParams(window.location.search);
+            if (!params.has('pseudo')) {
+                const pseudo = prompt("Enter your name:");
+                if (pseudo) {
+                    params.set('pseudo', pseudo);
+                    window.location.search = params.toString();
+                } else {
+                    alert("Pseudo is required to join the game.");
+                }
+            } else {
+                document.write('<script src="script.js"><\/script>');
+            }
+        </script>
     </body>
 </html>
