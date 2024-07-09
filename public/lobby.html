@@ -29,6 +29,12 @@
             } else {
                 document.write('<script src="script.js"><\/script>');
             }
+
+            function startGame() {
+                const gameCode = params.get('gameCode');
+                const pseudo = params.get('pseudo');
+                socket.emit('startGame', { gameCode, pseudo });
+            }
         </script>
     </body>
 </html>

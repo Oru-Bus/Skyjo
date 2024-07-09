@@ -2,7 +2,6 @@ const socket = io();
 
 let gameCode;
 let playerName;
-let playerId;
 let isGameCreator = false;
 
 window.onload = function() {
@@ -35,9 +34,7 @@ socket.on('updateLobby', (data) => {
 });
 
 socket.on('startGame', (data) => {
-    document.getElementById('lobby').style.display = 'none';
-    document.getElementById('gameBoard').style.display = 'block';
-    updateGameBoard(data);
+    window.location.href = `game.html?gameCode=${gameCode}&pseudo=${playerName}`;
 });
 
 function updateLobby(data) {
@@ -52,33 +49,4 @@ function updateLobby(data) {
     if (data.players.length >= 2 && isGameCreator) {
         document.getElementById('startGameButton').disabled = false;
     }
-}
-
-function startGame() {
-    socket.emit('startGame', { gameCode });
-}
-
-function updateGameBoard(data) {
-    const playersHands = document.getElementById('playersHands');
-    playersHands.innerHTML = '';
-    data.players.forEach(player => {
-        const playerHand = document.createElement('div');
-        playerHand.className = 'playerHand';
-        playerHand.innerHTML = `<h3>${player.name}</h3>`;
-        player.cards.forEach(card => {
-            const cardElement = document.createElement('div');
-            cardElement.className = 'card';
-            cardElement.innerText = card.revealed ? card.value : '?';
-            playerHand.appendChild(cardElement);
-        });
-        playersHands.appendChild(playerHand);
-    });
-}
-
-function drawCard() {
-    socket.emit('drawCard', { gameCode, playerId });
-}
-
-function discardCard() {
-    socket.emit('discardCard', { gameCode, playerId });
 }
