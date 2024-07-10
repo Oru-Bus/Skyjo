@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('startGame', (roomCode) => {
-        io.to(roomCode).emit('gameStarted');
+        io.to(roomCode).emit('gameStarted', rooms[roomCode].players);
     });
 });
 

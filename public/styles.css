@@ -8,21 +8,19 @@ body {
     margin: 0;
 }
 
-#home, #lobby, #game {
+#home, #room {
     text-align: center;
 }
 
-#gameBoard {
+#landscapeWarning {
     display: none;
-    text-align: center;
-}
-
-#playersHands {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.playerHand {
-    margin: 0 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
 }
