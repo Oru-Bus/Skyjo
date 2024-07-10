@@ -3,23 +3,17 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Skyjo Online</title>
-        <link rel="stylesheet" href="styles.css">
+        <title>Skyjo en ligne</title>
+        <link rel="stylesheet" href="./styles.css">
     </head>
     <body>
-        <div id="home">
-            <h1>Skyjo Online</h1>
-            <button onclick="choosePseudo()">Play</button>
+        <div id="app">
+            <h1>Skyjo en ligne</h1>
+            <input type="text" id="pseudo" placeholder="Entrez votre pseudo">
+            <button id="createRoom">Créer un salon</button>
+            <input type="text" id="roomCode" placeholder="Code du salon">
+            <button id="joinRoom">Rejoindre un salon</button>
         </div>
-
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
-            function choosePseudo() {
-                const pseudo = prompt("Enter your name:");
-                if (pseudo) {
-                    window.location.href = `/lobby.html?pseudo=${pseudo}`;
-                }
-            }
-        </script>
+        <script src="./index.js"></script>
     </body>
 </html>

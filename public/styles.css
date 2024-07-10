@@ -26,15 +26,3 @@ body {
 .playerHand {
     margin: 0 20px;
 }
-
-.card {
-    width: 100px;
-    height: 150px;
-    background-color: white;
-    border: 1px solid #ccc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    cursor: pointer;
-}
