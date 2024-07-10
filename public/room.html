@@ -13,8 +13,12 @@
         <div id="players"></div>
         <button id="startGameButton" onclick="startGame()" disabled>Start Game</button>
     </div>
+    <div id="game">
+        <h2>HEY</h2>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        document.getElementById("game").style.visibility='hidden';
         const socket = io();
         const urlParams = new URLSearchParams(window.location.search);
         const pseudo = urlParams.get('pseudo');
@@ -63,6 +67,15 @@
                 startButton.disabled = true;
             }
         };
+
+        function startGame() {
+            socket.emit('startGame', roomCode);
+        };
+
+        socket.on('gameStarted', () => {
+            document.getElementById("room").style.visibility = 'hidden';
+            document.getElementById("game").style.visibility = 'visible';
+        });
     </script>
 </body>
 </html>

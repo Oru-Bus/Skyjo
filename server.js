@@ -53,6 +53,10 @@ io.on('connection', (socket) => {
             }
         }
     });
+
+    socket.on('startGame', (roomCode) => {
+        io.to(roomCode).emit('gameStarted');
+    });
 });
 
 server.listen(3000, () => {
