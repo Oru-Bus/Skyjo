@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyjo Game</title>
+</head>
+<body>
+    <div id="game">
+        <h1>Skyjo Game</h1>
+        <div id="players"></div>
+    </div>
+    <div id="landscapeWarning">Veuillez passer en mode paysage pour une meilleure expérience.</div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const urlParams = new URLSearchParams(window.location.search);
+        const pseudo = urlParams.get('pseudo');
+        const roomCode = window.location.pathname.split('/')[2];
+
+        socket.emit('gameStarted', roomCode);
+
+        socket.on('playerPseudos', (playersList) => {
+            console.log("test");
+        });
+
+
+        function checkOrientation() {
+            if (window.innerHeight > window.innerWidth) {
+                document.getElementById('landscapeWarning').style.display = 'block';
+            } else {
+                document.getElementById('landscapeWarning').style.display = 'none';
+            }
+        }
+
+        window.addEventListener('resize', checkOrientation);
+        checkOrientation();
+    </script>
+</body>
+</html>

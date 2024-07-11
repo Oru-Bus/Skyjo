@@ -1,130 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Salon Skyjo</title>
-        <link rel="stylesheet" href="/styles.css" id="main-stylesheet">
-    </head>
-    <body>
-        <div id="room">
-            <h1>Salon Skyjo</h1>
-            <h4>Le code pour rejoindre le salon est : <strong id="roomCode"></strong></h4>
-            <div id="players"></div>
-            <button id="startGameButton" onclick="startGame()" disabled>Start Game</button>
-        </div>
-        <div id="game">
-            <div id="playerContainer"></div>
-        </div>
-        <div id="landscapeWarning">Veuillez passer en mode paysage pour une meilleure expérience.</div>
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
-            document.getElementById("game").style.visibility='hidden';
-            const socket = io();
-            const urlParams = new URLSearchParams(window.location.search);
-            const pseudo = urlParams.get('pseudo');
-            const roomCode = window.location.pathname.split('/')[2];
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon Skyjo</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div id="room">
+        <h1>Salon Skyjo</h1>
+        <h4>Le code pour rejoindre le salon est : <strong id="roomCode"></strong></h4>
+        <div id="players"></div>
+        <button id="startGameButton" onclick="startGame()" disabled>Start Game</button>
+    </div>
+    <div id="landscapeWarning">Veuillez passer en mode paysage pour une meilleure expérience.</div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const urlParams = new URLSearchParams(window.location.search);
+        const pseudo = urlParams.get('pseudo');
+        const roomCode = window.location.pathname.split('/')[2];
 
-            document.getElementById("roomCode").innerText = `${roomCode}`;
+        document.getElementById("roomCode").innerText = roomCode;
 
-            socket.emit('joinRoom', roomCode, pseudo);
+        socket.emit('joinRoom', roomCode, pseudo);
 
-            socket.on('currentPlayers', (players) => {
-                const playerList = document.getElementById('players');
-                playerList.innerHTML = '';
-                players.forEach(player => {
-                    const playerDiv = document.createElement('div');
-                    playerDiv.innerText = player;
-                    playerList.appendChild(playerDiv);
-                });
-                toggleStartButton(players.length);
+        socket.on('currentPlayers', (players) => {
+            const playerList = document.getElementById('players');
+            playerList.innerHTML = '';
+            players.forEach(player => {
+                const playerDiv = document.createElement('div');
+                playerDiv.innerText = player;
+                playerList.appendChild(playerDiv);
             });
+            toggleStartButton(players.length);
+        });
 
-            socket.on('newPlayer', (newPseudo) => {
-                const playerList = document.getElementById('players');
-                const player = document.createElement('div');
-                player.innerText = newPseudo;
-                playerList.appendChild(player);
-                toggleStartButton(playerList.children.length);
-            });
+        socket.on('newPlayer', (newPseudo) => {
+            const playerList = document.getElementById('players');
+            const player = document.createElement('div');
+            player.innerText = newPseudo;
+            playerList.appendChild(player);
+            toggleStartButton(playerList.children.length);
+        });
 
-            socket.on('playerLeft', (leftPseudo) => {
-                const playerList = document.getElementById('players');
-                const players = Array.from(playerList.children);
-                players.forEach(player => {
-                    if (player.innerText === leftPseudo) {
-                        playerList.removeChild(player);
-                    }
-                });
-                toggleStartButton(playerList.children.length);
-            });
-
-            function toggleStartButton(playerCount) {
-                const startButton = document.getElementById('startGameButton');
-                if (playerCount >= 2) {
-                    startButton.disabled = false;
-                } else {
-                    startButton.disabled = true;
+        socket.on('playerLeft', (leftPseudo) => {
+            const playerList = document.getElementById('players');
+            const players = Array.from(playerList.children);
+            players.forEach(player => {
+                if (player.innerText === leftPseudo) {
+                    playerList.removeChild(player);
                 }
-            };
-
-
-            // ---------------------------------------- G A M E -------------------------------------
-            
-            
-            function startGame() {
-                socket.emit('startGame', roomCode);
-            };
-
-            socket.on('gameStarted', (players) => {
-                switchCSS('/game.css');
-                document.getElementById("room").style.visibility = 'hidden';
-                document.getElementById("game").style.visibility = 'visible';
-                arrangePlayersInRectangle(players);
-                checkOrientation();
             });
+            toggleStartButton(playerList.children.length);
+        });
 
-            function arrangePlayersInRectangle(players) {
-                const playerContainer = document.getElementById('playerContainer');
-                playerContainer.innerHTML = '';
-                const positions = [
-                    'bottom-left',
-                    'bottom-right',
-                    'top-right',
-                    'top-left'
-                ];
-                if (players.length === 2) {
-                    positions[0] = 'bottom-center';
-                    positions[1] = 'top-center';
-                }
-                players.forEach((player, index) => {
-                    const playerDiv = document.createElement('div');
-                    playerDiv.classList.add('playerPosition');
-                    playerDiv.id = positions[index];
-                    playerDiv.innerText = player.pseudo;
-                    playerContainer.appendChild(playerDiv);
-                });
-            };
+        function toggleStartButton(playerCount) {
+            const startButton = document.getElementById('startGameButton');
+            startButton.disabled = playerCount < 2;
+        }
 
+        function startGame() {
+            socket.emit('startGame', roomCode);
+        }
 
-            function checkOrientation() {
-                if (window.innerHeight > window.innerWidth) {
-                    document.getElementById('landscapeWarning').style.display = 'block';
-                } else {
-                    document.getElementById('landscapeWarning').style.display = 'none';
-                };
-            };
-
-            function switchCSS(newCSS) {
-                const oldLink = document.getElementById('main-stylesheet');
-                const newLink = document.createElement('link');
-                newLink.rel = 'stylesheet';
-                newLink.href = newCSS;
-                newLink.id = 'main-stylesheet';
-                document.head.replaceChild(newLink, oldLink);
-            };
-
-            window.addEventListener('resize', checkOrientation);
-        </script>
-    </body>
+        socket.on('gameRedirect', (roomCode) => {
+            window.location.href = `/game/${roomCode}?pseudo=${pseudo}`;
+        });
+    </script>
+</body>
 </html>
